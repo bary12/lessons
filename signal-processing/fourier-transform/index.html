@@ -7,6 +7,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.2/p5.min.js" crossorigin="anonymous"></script>
     <!-- GSAP available for lesson animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" integrity="sha512-NcZdtrT77bJr4STcmsGAESr06BYGE8woZdSdEgqnpyqac7sugNO+Tr4bGwGF3MsnEkGKhU2KL2xh6Ec+BqsaHA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- MathJax for equation rendering -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+            },
+            startup: { typeset: false },
+            options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] },
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
     <title>Fourier Transform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,9 +30,17 @@
             --mono:         'IBM Plex Mono', monospace;
             --serif:        'Cormorant Garamond', serif;
             --body:         'Lora', serif;
-            --text-pane-w:  310px;
+            --text-pane-w:  330px;
         }
         body { background: var(--bg); color: #fff; }
+
+        /* MathJax colour and sizing in the text pane */
+        mjx-container { color: rgba(255,255,255,0.85) !important; font-size: 0.92em; }
+        mjx-container[display="true"] {
+            margin: 0.55rem 0 !important;
+            text-align: left !important;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
