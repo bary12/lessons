@@ -184,8 +184,7 @@ function _speak(text) {
     if (voices.length > 0) {
         // prefer male voice if available
         utterance.voice = voices.find(
-            v => v.name.toLowerCase().includes('male') &&
-            !v.name.toLowerCase().includes('female')) || voices[0];
+            v => v.name.toLowerCase().includes('male')) || voices[0];
     }
     window.speechSynthesis.speak(utterance);
 }
