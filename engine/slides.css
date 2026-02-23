@@ -1,0 +1,181 @@
+/* engine/slides.css — p5.js slide engine v2
+ *
+ * CSS variables (define in your lesson):
+ *   --bg        background colour
+ *   --body      body font stack
+ *   --serif     display / heading font
+ *   --mono      monospace font
+ *   --rule      divider colour          (default: rgba(255,255,255,0.07))
+ *   --text-pane-w  text pane width      (default: 300px)
+ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+/* ── Root shell ── */
+.sl-root {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg, #080810);
+    color: rgba(255,255,255,0.72);
+    font-family: var(--body, sans-serif);
+    overflow: hidden;
+}
+
+/* ── Two-pane layout ── */
+.sl-layout {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ── Text pane ── */
+.sl-text {
+    width: var(--text-pane-w, 300px);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--rule, rgba(255,255,255,0.07));
+}
+
+.sl-text-body {
+    flex: 1;
+    padding: 2rem 1.5rem 1.5rem;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+.sl-title {
+    font-family: var(--serif, serif);
+    font-size: clamp(1rem, 1.6vw, 1.35rem);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1.8rem;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+}
+
+.sl-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.sl-para {
+    font-family: var(--body, sans-serif);
+    font-size: clamp(0.78rem, 1vw, 0.9rem);
+    line-height: 1.82;
+    color: rgba(255,255,255,0.62);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.sl-para.sl-para-on {
+    opacity: 1;
+    transform: translateY(0);
+}
+.sl-para em     { font-style: italic; color: rgba(255,255,255,0.9); }
+.sl-para strong { font-weight: 600;   color: rgba(255,255,255,0.9); }
+
+.sl-text-footer {
+    padding: 0.55rem 1.5rem;
+    border-top: 1px solid var(--rule, rgba(255,255,255,0.07));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.sl-counter {
+    font-family: var(--mono, monospace);
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    color: rgba(255,255,255,0.17);
+}
+
+.sl-tts-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.32);
+    border-radius: 3px;
+    padding: 0.15rem 0.5rem;
+    cursor: pointer;
+    font-size: 0.7rem;
+    line-height: 1.6;
+    transition: color 0.2s, border-color 0.2s;
+}
+.sl-tts-btn:hover     { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.25); }
+.sl-tts-btn.sl-tts-off { color: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.05); }
+
+/* ── Canvas pane ── */
+.sl-canvas {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ── Nav bar ── */
+.sl-nav {
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    border-top: 1px solid var(--rule, rgba(255,255,255,0.07));
+    background: rgba(0,0,0,0.12);
+}
+
+.sl-prev, .sl-next {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.22);
+    cursor: pointer;
+    font-family: var(--mono, monospace);
+    font-size: 0.72rem;
+    padding: 0.3rem 0.6rem;
+    transition: color 0.2s;
+    letter-spacing: 0.08em;
+}
+.sl-prev:hover, .sl-next:hover { color: rgba(255,255,255,0.6); }
+.sl-prev:disabled, .sl-next:disabled { opacity: 0; pointer-events: none; }
+
+.sl-dots { display: flex; gap: 7px; align-items: center; }
+
+.sl-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.25s, transform 0.25s;
+}
+.sl-dot-active {
+    background: rgba(255,255,255,0.8);
+    transform: scale(1.6);
+}
+
+.sl-nav-label {
+    font-family: var(--mono, monospace);
+    font-size: 0.56rem;
+    letter-spacing: 0.35em;
+    color: rgba(255,255,255,0.11);
+    min-width: 3.5em;
+    text-align: center;
+}
+
+/* ── Mobile: stack vertically ── */
+@media (max-width: 580px) {
+    .sl-layout     { flex-direction: column-reverse; }
+    .sl-text       { width: 100%; max-height: 38vh; border-right: none;
+                     border-top: 1px solid var(--rule, rgba(255,255,255,0.07)); }
+}
