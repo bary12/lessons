@@ -29,8 +29,10 @@ register({
     title: 'Fourier Transform',
 
     steps: [
-        { text: 'Every sound, image, and signal is secretly a sum of pure sine waves. The Fourier transform is the tool that finds them.' },
-        { text: 'Proposed by Fourier in 1822 for heat flow, it now underpins MP3 audio, JPEG images, radio transmission, and MRI scanners — one of the most useful ideas in all of mathematics.' },
+        { text: 'Every sound, image, and signal is secretly a sum of pure sine waves. The Fourier transform is the tool that finds them.',
+          speech: 'Every sound, image, and signal is secretly a sum of pure sine waves. The Fourier transform is the tool that finds them.' },
+        { text: 'Proposed by Fourier in 1822 for heat flow, it now underpins MP3 audio, JPEG images, radio transmission, and MRI scanners — one of the most useful ideas in all of mathematics.',
+          speech: 'Proposed by Fourier in 1822 for heat flow, it now underpins MP3 audio, JPEG images, radio transmission, and MRI scanners — one of the most useful ideas in all of mathematics.' },
     ],
 
     draw(p, _s) {
@@ -68,10 +70,13 @@ register({
     title: 'a pure tone',
 
     steps: [
-        { text: 'A <strong>pure tone</strong> oscillates at a single frequency, repeating the same shape forever. It is the atom from which all signals are built.' },
+        { text: 'A <strong>pure tone</strong> oscillates at a single frequency, repeating the same shape forever. It is the atom from which all signals are built.',
+          speech: 'A pure tone oscillates at a single frequency, repeating the same shape forever. It is the atom from which all signals are built.' },
         { text: 'Written as \\(x(t) = A\\sin(2\\pi ft)\\). Amplitude \\(A\\) sets the peak height; frequency \\(f\\) (in Hz) counts full cycles per second. Here \\(f = 1\\) Hz: one cycle every second.',
+          speech: 'Written as x of t equals A times sine of 2 pi f t. Amplitude A sets the peak height; frequency f, in hertz, counts full cycles per second. Here f equals 1 hertz: one cycle every second.',
           enter: () => typeset() },
         { text: 'Phase \\(\\phi\\) shifts it sideways: \\(x(t) = A\\sin(2\\pi ft + \\phi)\\). The Fourier transform recovers both \\(A\\) and \\(f\\) — the two numbers that fully characterise a pure tone.',
+          speech: 'Phase phi shifts it sideways: x of t equals A times sine of 2 pi f t plus phi. The Fourier transform recovers both A and f — the two numbers that fully characterise a pure tone.',
           enter: () => typeset() },
     ],
 
@@ -136,10 +141,13 @@ register({
     title: 'superposition',
 
     steps: [
-        { text: 'Real signals contain <strong>many frequencies at once</strong>. Sine waves add point by point — they don\'t interfere with each other\'s existence, they simply sum.' },
+        { text: 'Real signals contain <strong>many frequencies at once</strong>. Sine waves add point by point — they don\'t interfere with each other\'s existence, they simply sum.',
+          speech: 'Real signals contain many frequencies at once. Sine waves add point by point — they don\'t interfere with each other\'s existence, they simply sum.' },
         { text: 'Our example signal: \\[x(t) = \\sin(2\\pi t) + \\tfrac{1}{2}\\sin(4\\pi t) + \\tfrac{1}{4}\\sin(6\\pi t)\\] Three pure tones at 1 Hz, 2 Hz, and 3 Hz, with decreasing amplitudes.',
+          speech: 'Our example signal: x of t equals sine of 2 pi t, plus one half times sine of 4 pi t, plus one quarter times sine of 6 pi t. Three pure tones at 1 hertz, 2 hertz, and 3 hertz, with decreasing amplitudes.',
           enter: () => typeset() },
         { text: 'The <strong>white curve</strong> is the sum — what a microphone would record. One complex waveform, secretly three simple sines. The Fourier transform unmixes them.',
+          speech: 'The white curve is the sum — what a microphone would record. One complex waveform, secretly three simple sines. The Fourier transform unmixes them.',
           enter: () => typeset() },
     ],
 
@@ -212,10 +220,13 @@ register({
 
     steps: [
         { text: 'The Fourier transform is built on <strong>complex exponentials</strong>. Euler\'s formula connects them to sinusoids: \\[e^{i\\theta} = \\cos\\theta + i\\sin\\theta\\]',
+          speech: 'The Fourier transform is built on complex exponentials. Euler\'s formula connects them to sinusoids: e to the i theta equals cosine theta plus i times sine theta.',
           enter: () => typeset() },
         { text: 'Think of \\(e^{i\\theta}\\) as a point on the unit circle in the complex plane. As \\(\\theta\\) grows, it rotates counter-clockwise. The <span style="color:#fb923c">real part</span> traces a cosine; the <span style="color:#86efac">imaginary part</span> traces a sine.',
+          speech: 'Think of e to the i theta as a point on the unit circle in the complex plane. As theta grows, it rotates counter-clockwise. The real part traces a cosine; the imaginary part traces a sine.',
           enter: () => typeset() },
         { text: 'At frequency \\(f\\), set \\(\\theta = 2\\pi ft\\). Then \\(e^{2\\pi ift}\\) completes exactly \\(f\\) full rotations per second — a pure oscillation in the complex plane, cleaner than sine and cosine separately.',
+          speech: 'At frequency f, set theta equal to 2 pi f t. Then e to the 2 pi i f t completes exactly f full rotations per second — a pure oscillation in the complex plane, cleaner than sine and cosine separately.',
           enter: () => typeset() },
     ],
 
@@ -373,10 +384,13 @@ register({
 
     steps: [
         { text: 'The <strong>Fourier transform</strong>: \\[\\hat{f}(\\xi) = \\int_{-\\infty}^{\\infty} f(t)\\, e^{-2\\pi i\\xi t}\\, dt\\] It takes a time-domain signal \\(f(t)\\) and outputs \\(\\hat{f}(\\xi)\\) — a complex number for every frequency \\(\\xi\\).',
+          speech: 'The Fourier transform: f-hat of xi equals the integral from negative infinity to infinity of f of t, times e to the minus 2 pi i xi t, d t. It takes a time-domain signal f of t and outputs a complex number for every frequency xi.',
           enter: () => typeset() },
         { text: '\\(e^{-2\\pi i\\xi t}\\) is a unit-circle rotation at rate \\(\\xi\\). Multiplying \\(f(t)\\) by it <em>winds</em> the signal around a circle. The integral then computes the centre of mass of that coil.',
+          speech: 'e to the minus 2 pi i xi t is a unit-circle rotation at rate xi. Multiplying f of t by it winds the signal around a circle. The integral then computes the centre of mass of that coil.',
           enter: () => typeset() },
         { text: 'The magnitude \\(|\\hat{f}(\\xi)|\\) is the amplitude of frequency \\(\\xi\\) in the signal; the argument \\(\\arg\\hat{f}(\\xi)\\) is its phase. Three spikes, three frequencies — the signal fully decoded.',
+          speech: 'The magnitude of f-hat at xi is the amplitude of frequency xi in the signal; the argument of f-hat at xi is its phase. Three spikes, three frequencies — the signal fully decoded.',
           enter: () => typeset() },
     ],
 
@@ -509,10 +523,13 @@ register({
 
     steps: [
         { text: 'The geometric heart of the Fourier transform: for each test frequency \\(\\xi\\), multiply \\(f(t)\\) by \\(e^{2\\pi i\\xi t}\\). Each sample \\(f(t)\\) becomes a complex number rotating at rate \\(\\xi\\) — winding the signal around a circle.',
+          speech: 'The geometric heart of the Fourier transform: for each test frequency xi, multiply f of t by e to the 2 pi i xi t. Each sample becomes a complex number rotating at rate xi — winding the signal around a circle.',
           enter: () => typeset() },
         { text: 'As \\(\\xi\\) sweeps from 0 to 4 Hz, the coil shifts shape. At most frequencies the winding is incoherent — the <span style="color:#fbbf24">centre of mass</span> stays near the origin, so \\(|\\hat{f}(\\xi)| \\approx 0\\).',
+          speech: 'As xi sweeps from 0 to 4 hertz, the coil shifts shape. At most frequencies the winding is incoherent — the centre of mass stays near the origin, so the magnitude of f-hat at xi is approximately zero.',
           enter: () => typeset() },
         { text: 'At \\(\\xi = 1, 2, 3\\) Hz the coil aligns and the centre of mass jumps. Three spikes grow in the spectrum on the right — each one revealing a frequency hidden in the signal.',
+          speech: 'At xi equals 1, 2, and 3 hertz, the coil aligns and the centre of mass jumps. Three spikes grow in the spectrum on the right — each one revealing a frequency hidden in the signal.',
           enter: () => typeset() },
     ],
 
@@ -698,9 +715,12 @@ register({
 
     steps: [
         { text: 'One more view: each sinusoidal component \\(A_k\\sin(2\\pi f_k t)\\) becomes a <em>rotating vector</em> — radius \\(A_k\\), spin rate \\(2\\pi f_k\\) radians per second.',
+          speech: 'One more view: each sinusoidal component A-sub-k times sine of 2 pi f-sub-k t becomes a rotating vector — radius A-sub-k, spin rate 2 pi f-sub-k radians per second.',
           enter: () => typeset() },
-        { text: 'Chain them tip to tail: 1 Hz (cyan), 2 Hz (orange), 3 Hz (green). Each arm spins at its own frequency, carrying its amplitude in its length.' },
+        { text: 'Chain them tip to tail: 1 Hz (cyan), 2 Hz (orange), 3 Hz (green). Each arm spins at its own frequency, carrying its amplitude in its length.',
+          speech: 'Chain them tip to tail: 1 hertz in cyan, 2 hertz in orange, 3 hertz in green. Each arm spins at its own frequency, carrying its amplitude in its length.' },
         { text: 'The tip traces a path. Projected vertically, it <strong>recreates the original signal exactly</strong>. Epicycles and the Fourier transform are the same idea — just different ways of writing the same sum.',
+          speech: 'The tip traces a path. Projected vertically, it recreates the original signal exactly. Epicycles and the Fourier transform are the same idea — just different ways of writing the same sum.',
           enter: () => typeset() },
     ],
 

@@ -23,8 +23,11 @@ let _pendingText = null; // text queued before voices were ready
 function _pickVoice() {
     const voices = window.speechSynthesis?.getVoices() ?? [];
     if (!voices.length) return;
-    _voice      = voices.find(v => v.lang.startsWith('en-GB') && v.name.includes('Female'))
-               ?? voices[0];
+    // prefer male voice
+    _voice = voices.find(
+        v => v.lang.startsWith('en')
+            && v.name.toLowerCase().includes('male')
+            && !v.name.toLowerCase().includes('female')) || voices[0];
     _voiceReady = true;
     if (_pendingText !== null) {
         const t = _pendingText;
@@ -102,6 +105,17 @@ export function init(selector = '#app', config = {}) {
         if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); _advance(); }
         if (e.key === 'ArrowLeft')                   { e.preventDefault(); _back(); }
     });
+
+    // Mobile: tap anywhere to advance (distinguish from scroll)
+    let _touchStartY = 0;
+    root.addEventListener('touchstart', e => {
+        _touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    root.addEventListener('touchend', e => {
+        if (e.target.closest('button, a')) return;
+        const dy = Math.abs(e.changedTouches[0].clientY - _touchStartY);
+        if (dy < 10) _advance();
+    }, { passive: true });
 
     if (config.intro) {
         _showIntro(root, config.intro);
@@ -197,7 +211,7 @@ function _goStep(j) {
         _dom.steps.appendChild(el);
         requestAnimationFrame(() => el.classList.add('sl-para-on'));
         step.enter?.(_p5inst, _state, true);
-        _speak(_strip(step.text ?? ''));
+        _speak(step.speech ?? _strip(step.text ?? ''));
         // scroll new para into view after its fade
         setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
     } else {
