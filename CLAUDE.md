@@ -3,3 +3,7 @@ This is a website that gathers animation and visual explanations for concepts in
 we try to stay 100% static, vanilla HTML+CSS+JS.
 
 For animations, we use gsap. Each page is an animated lesson, covering either a specific concept (e.g. Fourier transform) or published paper.
+
+Try to keep a balance of:
+* Using simple language
+* Actually teaching the difficult stuff (including equations, etc)

@@ -14,12 +14,36 @@ let _p5inst = null;
 let _state  = null;
 let _tts    = true;
 
+// ── Voice loading ─────────────────────────────────────────────────────────────
+// getVoices() returns [] on first call; voices load asynchronously.
+let _voice       = null;
+let _voiceReady  = false;
+let _pendingText = null; // text queued before voices were ready
+
+function _pickVoice() {
+    const voices = window.speechSynthesis?.getVoices() ?? [];
+    if (!voices.length) return;
+    _voice      = voices.find(v => v.lang.startsWith('en-GB') && v.name.includes('Female'))
+               ?? voices[0];
+    _voiceReady = true;
+    if (_pendingText !== null) {
+        const t = _pendingText;
+        _pendingText = null;
+        _speak(t);
+    }
+}
+
+if (window.speechSynthesis) {
+    window.speechSynthesis.addEventListener('voiceschanged', _pickVoice);
+    _pickVoice(); // succeeds immediately on Firefox; no-op on Chrome first call
+}
+
 // ── Public API ────────────────────────────────────────────────────────────────
 
 export function register(slide) { _slides.push(slide); }
 export function current()       { return { ..._cur }; }
 
-export function init(selector = '#app') {
+export function init(selector = '#app', config = {}) {
     const root = document.querySelector(selector);
     if (!root) throw new Error(`slides: "${selector}" not found`);
 
@@ -79,7 +103,43 @@ export function init(selector = '#app') {
         if (e.key === 'ArrowLeft')                   { e.preventDefault(); _back(); }
     });
 
-    _goSlide(0);
+    if (config.intro) {
+        _showIntro(root, config.intro);
+    } else {
+        _goSlide(0);
+    }
+}
+
+function _showIntro(root, intro) {
+    const el = document.createElement('div');
+    el.className = 'sl-intro';
+    el.innerHTML = `
+        <div class="sl-intro-inner">
+            <h1 class="sl-intro-title">${intro.title ?? ''}</h1>
+            ${intro.sub ? `<p class="sl-intro-sub">${intro.sub}</p>` : ''}
+            <p class="sl-intro-cta">press &rarr; to begin</p>
+        </div>`;
+    root.appendChild(el);
+
+    requestAnimationFrame(() => el.classList.add('sl-intro-on'));
+
+    function dismiss() {
+        el.classList.add('sl-intro-out');
+        _goSlide(0); // start lesson during fade — canvas ready when overlay clears
+        el.addEventListener('transitionend', () => el.remove(), { once: true });
+        document.removeEventListener('keydown', onKey);
+        el.removeEventListener('click', dismiss);
+    }
+
+    function onKey(e) {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            dismiss();
+        }
+    }
+
+    el.addEventListener('click', dismiss);
+    document.addEventListener('keydown', onKey);
 }
 
 // ── Internal ──────────────────────────────────────────────────────────────────
@@ -151,6 +211,7 @@ function _goStep(j) {
 }
 
 function _advance() {
+    if (_cur.slide < 0) return; // lesson not started yet (intro still showing)
     const steps = _slides[_cur.slide]?.steps ?? [];
     if (_cur.step < steps.length - 1) {
         _goStep(_cur.step + 1);
@@ -160,6 +221,7 @@ function _advance() {
 }
 
 function _back() {
+    if (_cur.slide < 0) return;
     if (_cur.step > 0) {
         _goStep(_cur.step - 1);
     } else if (_cur.slide > 0) {
@@ -177,16 +239,11 @@ function _updateNav() {
 
 function _speak(text) {
     if (!_tts || !window.speechSynthesis) return;
+    if (!_voiceReady) { _pendingText = text; return; } // defer until voiceschanged fires
     window.speechSynthesis.cancel();
-
-    let utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    if (voices.length > 0) {
-        // prefer male voice if available
-        utterance.voice = voices.find(
-            v => v.name.toLowerCase().includes('male')) || voices[0];
-    }
-    window.speechSynthesis.speak(utterance);
+    const utt = new SpeechSynthesisUtterance(text);
+    if (_voice) utt.voice = _voice;
+    window.speechSynthesis.speak(utt);
 }
 
 function _strip(html) {

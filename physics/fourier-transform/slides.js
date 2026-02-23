@@ -463,4 +463,9 @@ register({
 });
 
 // ── Boot ──────────────────────────────────────────────────────────────────────
-init('#app');
+init('#app', {
+    intro: {
+        title: 'Fourier Transform',
+        sub:   'an animated lesson',
+    },
+});
